@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Station, StationDetail, Reservation } from "@/types";
+import type { Station, StationDetail, Rental } from "/types"
 
 // Un solo cliente Axios para toda la app. La URL vive en .env.local
 export const api = axios.create({
@@ -16,26 +16,25 @@ export async function getStation(id: string) {
   return data;
 }
 
-export async function getReservations() {
-  const { data } = await api.get<Reservation[]>("/reservations");
+export async function getRentals() {
+  const { data } = await api.get<Rental[]>("/Rentals");
   return data;
 }
 
 // Numeros de asiento ya reservados en UN horario (el API devuelve las reservas de todos)
-export async function getReservedSeats(screeningId: string) {
-  const all = await getReservations();
-  return all.filter((r) => r.screeningId === screeningId).map((r) => r.seatNumber);
+export async function getReservedBikes(screeningId: string) {
+  const all = await getRentals();
+  return all.filter((r) => r.screeningId === screeningId).map((r) => r.BikeNumber);
 }
 
-export async function createReservation(screeningId: string, seatNumber: number) {
-  const { data } = await api.post<Reservation>("/reservations", {
+export async function createRental(screeningId: string, BikeNumber: number) {
+  const { data } = await api.post<Rental>("/Rentals", {
     screeningId,
-    seatNumber,
+    BikeNumber,
   });
   return data;
 }
 
-// Convierte cualquier error en un texto que se puede mostrar en pantalla
 export function getErrorMessage(error: unknown): string {
   if (axios.isAxiosError(error)) {
     return error.response?.data?.message ?? "Could not reach the server. Is the API running?";

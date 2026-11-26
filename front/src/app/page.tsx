@@ -2,43 +2,37 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import axios from "axios";
-
-interface Stations {
-  id: string;
-  name: string;
-  x: string;
-  y: number;
-  capacity: string;
-  avaliableBikes: string;
-
-}
+import { getStations, getErrorMessage } from "src/app/lib/api";
+import type { Station } from "@/types";
 
 export default function HomePage() {
-  const [stations, setStations] = useState<Stations[]>([]);
+  const [Stations, setStations] = useState<Station[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    axios.get<Stations[]>("http://localhost:30002/stations").then((res) => {
-      setStations(res.data);
-    });
+    getStations()
+      .then(setStations)
+      .catch((e) => setError(getErrorMessage(e)))
+      .finally(() => setLoading(false));
   }, []);
 
   return (
-    <main className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Stations</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {stations.map((station) => (
+    <section>
+      <h1 className="mb-4 text-2xl font-bold">Stations</h1>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {Stations.map((Station) => (
           <Link
-            key={station.id}
-            href={`/stations/${station.id}`}
-            className="border p-4 block"
+            key={Station.id}
+            href={`/Stations/${Station.id}`}
+            className="rounded-lg border bg-white p-4 shadow-sm transition hover:shadow-md"
           >
-            <h2 className="text-lg font-bold">{station.name}</h2>
-            <p>X: {station.x}</p>
-            <p>Y: {station.y}</p>
+            <h2 className="text-lg font-semibold">{Station.title}</h2>
+            <p className="text-sm text-gray-600">Duration: {Station.duration} min</p>
+            <p className="text-sm text-gray-600">Genre: {Station.genre}</p>
           </Link>
         ))}
       </div>
-    </main>
+    </section>
   );
 }

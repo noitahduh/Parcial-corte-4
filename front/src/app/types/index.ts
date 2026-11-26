@@ -1,4 +1,4 @@
-export interface Station = {
+export interface Station {
     id:string
     name:string
     x:number
@@ -8,29 +8,20 @@ export interface Station = {
 
 }
 
-export interface Movie {
-  id: string;
-  title: string;
-  description: string;
-  duration: number;
-  genre: string;
-  posterUrl: string;
-}
-
 export interface Screening {
   id: string;
-  movieId: string;
+  StationId: string;
   date: string;
   startTime: string;
   room: string;
 }
 
-// GET /movies/:id devuelve la pelicula + sus horarios
-export interface MovieDetail extends Movie {
+// GET /Stations/:id devuelve la pelicula + sus horarios
+export interface StationDetail extends Station {
   screenings: Screening[];
 }
 
-export interface Reservation {
+export interface Rental {
   id: string;
   screeningId: string;
   seatNumber: number;
