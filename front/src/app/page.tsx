@@ -4,19 +4,21 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
 
-interface Movie {
+interface Stations {
   id: string;
-  title: string;
-  description: string;
-  duration: number;
-  genre: string;
+  name: string;
+  x: string;
+  y: number;
+  capacity: string;
+  avaliableBikes: string;
+
 }
 
 export default function HomePage() {
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const [movies, setMovies] = useState<Stations[]>([]);
 
   useEffect(() => {
-    axios.get<Movie[]>("http://localhost:30002/stations").then((res) => {
+    axios.get<Stations[]>("http://localhost:30002/stations").then((res) => {
       setMovies(res.data);
     });
   }, []);
